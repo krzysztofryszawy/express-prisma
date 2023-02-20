@@ -15,6 +15,11 @@ model User {
   email String @unique
   name  String
   items Item[]
+
+  giver Offer[] @relation("giverIdentificator")
+  taker Offer[] @relation("takerIdentificator")
+
+  // @@map("users")
 }
 
 model Item {
@@ -24,4 +29,25 @@ model Item {
   archived    Boolean @default(false)
   owner       User    @relation(fields: [ownerId], references: [id])
   ownerId     Int
+
+  giverItem Offer[] @relation("giverItemIdentificator")
+  takerItem Offer[] @relation("takerItemIdentificator")
+
+  // @@map("items")
+}
+
+model Offer {
+  id Int @id @default(autoincrement())
+// --- giver ---------------------
+  giver       User @relation("giverIdentificator", fields: [giverId], references: [id])
+  giverId     Int
+  giverItem   Item @relation("giverItemIdentificator", fields: [giverItemId], references: [id])
+  giverItemId Int
+// --- taker ----------------------
+  taker       User @relation("takerIdentificator", fields: [takerId], references: [id])
+  takerId     Int
+  takerItem   Item @relation("takerItemIdentificator", fields: [takerItemId], references: [id])
+  takerItemId Int
+
+  // @@map("offers")
 }

@@ -32,6 +32,47 @@ app.post(`/item`, async (req, res) => {
   res.json(result);
 });
 
+app.get("/givenoffer", async (req, res) => {
+
+  // get from req MY ID
+  const giverId = 1
+
+  const givenOffers = await prisma.offer.findMany({
+    where: { giverId: Number(giverId) },
+    include: {
+      giverItem: true,
+      takerItem: true,
+      taker: true
+    }
+  })
+
+  res.json(givenOffers);
+});
+
+app.get("/givenoffer/:id", async (req, res) => {
+  const { id } = req.params;
+
+  // get from req MY ID
+  const giverId = 1
+
+  const givenOffers = await prisma.offer.findMany({
+    where: { giverId: Number(giverId), id: Number(id)},
+    include: {
+      giverItem: true,
+      takerItem: true,
+      taker: true
+    }
+  })
+
+  res.json(givenOffers);
+});
+
+
+
+
+
+
+
 app.post(`/signup`, async (req, res) => {
   const { name, email, posts } = req.body;
 
